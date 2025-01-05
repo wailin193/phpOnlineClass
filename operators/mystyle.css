@@ -1,0 +1,63 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    background-color: aquamarine;
+    display: flex;
+}
+
+.myform {
+    background-color: antiquewhite;
+    width: 30%;
+    margin: auto;
+    padding: 1rem;
+    border-radius: 10px;
+    display: flex;
+}
+
+.row {
+    display: flex;
+    margin-bottom: 1rem;
+}
+
+.row label {
+    width: 40%;
+    color: darkblue;
+    margin: auto;
+}
+
+.datainput {
+    width: 60%;
+    height: 2rem;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    background-color: lightblue;
+}
+
+.btndiv {
+    text-align: center;
+}
+
+.btn {
+    background-color: darkblue;
+    color: white;
+    padding: 0.5rem 1rem;
+    border: none;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.pass {
+    color: darkblue;
+    text-align: center;
+}
+
+.fail {
+    color: red;
+    text-align: center;
+}
+
+.answer {
+    /* color: white; */
+    text-align: center;
+}

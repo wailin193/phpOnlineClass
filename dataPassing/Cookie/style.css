@@ -1,0 +1,59 @@
+footer {
+    background-color: black;
+    color: white;
+    text-align: center;
+    padding: 1rem 0rem;
+}
+
+.formcontainer {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+}
+
+.loginform {
+    width: 50%;
+    margin: auto;
+    background-color: beige;
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.row {
+    margin-bottom: 1rem;
+    display: flex;
+}
+
+.row label {
+    width: 20%;
+}
+
+.row input {
+    width: 80%;
+    height: 1.6rem;
+}
+
+;
+.btndiv {
+    text-align: center;
+}
+
+.btndiv .btn {
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 10px;
+    box-shadow: none;
+}
+
+.btndiv .btnlogin {
+    background-color: darkblue;
+}
+
+.btndiv .btnclear {
+    background-color: brown;
+}
+
+.err {
+    color: red;
+    text-align: center;
+}
