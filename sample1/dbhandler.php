@@ -1,27 +1,85 @@
 <?php
-    function insertItem($n,$d,$p,$img)
-    {
-        $servername = "localhost";
-        $username = "root";
-        $password = "";
-        $dbname = "dbforexercise";
-        try{
-            $conn = new PDO("mysql:host=$servername;dbname=$dbname",$username,$password);
-            $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    class DBHandler{
+        private static $servername = "localhost";
+        private static $username = "root";
+        private static $password = "";
+        private static $dbname = "dbforexercise";
+        private static $conn;
 
-            $sql = "insert into items(iname,idescription,iprice,iimage)
-             values('$n','$d',$p,'$img')";
+        public static function openConnection()
+        {
+            try{
+                DBHandler::$conn = new PDO("mysql:host=".self::$servername.";dbname=".self::$dbname,DBHandler::$username,DBHandler::$password);
+                DBHandler::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-             $conn->exec($sql);
+                return true;
+            }catch(PDOException $e){
+                echo "Exception: ".$e->getMessage();
+                return false;
+            }
+        }
 
-             $id= $conn->lastInsertId();
-            $conn=null;
-
-            return $id;
+        public static function insertItem($n,$d,$p,$img)
+        {
             
-        }catch(PDOException $e){
-            $conn->rollback();
-            echo "Exception: ".$e->getMessage();
+            try{
+                DBHandler::openConnection();
+                $sql = "insert into items(iname,idescription,iprice,iimage)
+                values('$n','$d',$p,'$img')";
+
+                DBHandler::$conn->exec($sql);
+
+                $id= DBHandler::$conn->lastInsertId();
+                DBHandler::$conn=null;
+
+                return $id;
+                
+            }catch(PDOException $e){
+                DBHandler::$conn->rollback();
+                echo "Exception: ".$e->getMessage();
+            }
+        }
+
+        public static function getAllItems()
+        {
+            
+            try{
+                DBHandler::openConnection();
+                $sql = "select * from items order by iname";
+
+                $st = DBHandler::$conn->query($sql);
+;
+                $ans = $st->fetchAll(\PDO::FETCH_ASSOC);
+                DBHandler::$conn=null;
+
+                return $ans;
+                
+            }catch(PDOException $e){
+                DBHandler::$conn->rollback();
+                echo "Exception: ".$e->getMessage();
+            }
+        }
+
+        public static function deleteItem($iid)
+        {
+            
+            try{
+                DBHandler::openConnection();
+                $sql = "delete from items where iid=$iid";
+                $stmt = DBHandler::$conn->prepare($sql);
+
+                $stmt->execute();
+
+                $row = $stmt->rowCount();
+
+                DBHandler::$conn=null;
+
+                return $row>0;
+                
+            }catch(PDOException $e){
+                DBHandler::$conn->rollback();
+                echo "Exception: ".$e->getMessage();
+            }
         }
     }
 ?>

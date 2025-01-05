@@ -39,9 +39,11 @@
             {
                 if(move_uploaded_file($_FILES["itemimage"]["tmp_name"],$location))
                 {
-                    $id = insertItem($name,$description,$price,$_FILES["itemimage"]["name"]);
-                    echo "<h1 class='header'>Successfully Uploaded! Current Item Id is $id</h1>";
-                    echo "<img src='".$location."' alt='".$_FILES["itemimage"]["name"]."'>";
+                    $id = DBHandler::insertItem($name,$description,$price,$_FILES["itemimage"]["name"]);
+                    $msg = "Successfully Uploaded! Current Item Id is $id";
+                    header("Location:itemManage.php?msg=$msg");
+                    exit();
+                    // echo "<img src='".$location."' alt='".$_FILES["itemimage"]["name"]."'>";
                 }
             }
             // else{
