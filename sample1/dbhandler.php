@@ -35,7 +35,6 @@
                 return $id;
                 
             }catch(PDOException $e){
-                DBHandler::$conn->rollback();
                 echo "Exception: ".$e->getMessage();
             }
         }
@@ -55,7 +54,6 @@
                 return $ans;
                 
             }catch(PDOException $e){
-                DBHandler::$conn->rollback();
                 echo "Exception: ".$e->getMessage();
             }
         }
@@ -77,7 +75,48 @@
                 return $row>0;
                 
             }catch(PDOException $e){
-                DBHandler::$conn->rollback();
+                echo "Exception: ".$e->getMessage();
+            }
+        }
+
+        public static function updateItem($iid,$iname,$ides,$iprice,$iimg)
+        {
+            
+            try{
+                DBHandler::openConnection();
+                $sql = "update items set iname='$iname',iprice=".$iprice.", idescription='$ides',iimage='$iimg' where iid=$iid";
+                $stmt = DBHandler::$conn->prepare($sql);
+
+                $stmt->execute();
+
+                $row = $stmt->rowCount();
+
+                DBHandler::$conn=null;
+
+                return $row;
+                
+            }catch(PDOException $e){
+                echo "Exception: ".$e->getMessage();
+            }
+        }
+
+        public static function updateItemNoImage($iid,$iname,$ides,$iprice)
+        {
+            
+            try{
+                DBHandler::openConnection();
+                $sql = "update items set iname='$iname',iprice=".$iprice.", idescription='$ides' where iid=$iid";
+                $stmt = DBHandler::$conn->prepare($sql);
+
+                $stmt->execute();
+
+                $row = $stmt->rowCount();
+
+                DBHandler::$conn=null;
+
+                return $row;
+                
+            }catch(PDOException $e){
                 echo "Exception: ".$e->getMessage();
             }
         }

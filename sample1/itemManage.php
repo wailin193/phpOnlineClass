@@ -1,3 +1,7 @@
+<?php 
+    session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,20 +26,89 @@
 </head>
 <body>
     <div class="container">
-    <?php
-        include "dbhandler.php";
+        <?php
+            include "dbhandler.php";
+        ?>
+        <form action="upload.php" method="post" enctype="multipart/form-data">
+        <?php
+            if(isset($_GET["msg"]))
+            {
+                echo "<h3 class='text-center text-danger'>".$_GET['msg']."</h3>";
+            }
+        ?>
+            <h3 class="text-primary text-center my-3" id="ititle">Insert Item</h3>
+            <div class="row mb-3">
+                <div class="col-md-3 offset-md-2 col-12">
+                    <label for="" class="fw-bold mb-md-0 mb-3">Item Name</label>
+                </div>
+                <div class="col-md-5 col-12">
+                    <input type="text" name="itemname" class="form-control" required autofocus id="iname">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 offset-md-2 col-12">
+                    <label for="" class="fw-bold mb-md-0 mb-3">Item Description</label>
+                </div>
+                <div class="col-md-5 col-12">
+                    <textarea name="itemdescription" rows="7" class="form-control" id="ides"></textarea>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 offset-md-2 col-12">
+                    <label for="" class="fw-bold mb-md-0 mb-3">Item Price</label>
+                </div>
+                <div class="col-md-5 col-12">
+                    <input type="number" name="itemprice" class="form-control" min="100" max="999999" required id="iprice">
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-md-3 offset-md-2 col-12">
+                    <label for="" class="fw-bold mb-md-0 mb-3">Item Image</label>
+                </div>
+                <div class="col-md-5 col-12">
+                    <?php 
+                        if(isset($_GET["action"]) && $_GET["action"]=="update")
+                        {
+                            //update
+                            ?>
+                    <input type="file" name="itemimage" id="iimg" class="form-control">
+
+                            <?php
+                        }
+                        else{
+                            //insert
+                            ?>
+                    <input type="file" name="itemimage" id="iimg" class="form-control" required >
+
+                            <?php
+                        }
+                    ?>
+
+                </div>
+            </div>
+
+            <div class="text-center">
+                <input type="submit" value="Insert Item" class = "btn btn-primary" name="btnitem" id="btn">
+                <input type="reset" value="Clear" class="btn btn-warning">
+            </div>
+        </form>
+
+        <?php
         if(isset($_GET["action"]))
         {
             $iid = $_GET["iid"];
+            $iimg = $_GET["iimg"];
+            $iname = $_GET["iname"];
+
             if($_GET["action"]=="delete")
             {
                 //delete
-                $iimg = $_GET["iimg"];
-                $iname = $_GET["iname"];
-
-    ?>
-            <script>
-                if(confirm("Do you want to delete?<?php echo $iname; ?>"))
+        ?>
+        <script>
+            if(confirm("Do you want to delete?<?php echo $iname; ?>"))
             {
                 // alert("Oki");
                 <?php 
@@ -45,65 +118,33 @@
                     $msg = "Successfully Deleted!";
                 }
                 ?>
-                location.assign("itemManage.php?msg=<?php echo $msg ?>");
+                location.assign("itemManage.php");
             }
-            </script>
-    <?php
+        </script>
+        <?php
             }
             else{
                 //update
+                $iprice = $_GET["iprice"];
+                $ides = $_GET["ides"];
+                $_SESSION["uiid"]=$iid;
+                $_SESSION["uimg"]=$iimg;
+                ?>
+                <script>
+                    ititle.innerHTML = "Update Item";
+                    ititle.classList.remove("text-primary");
+                    ititle.classList.add("text-danger");
+                    iname.value = "<?php echo $iname; ?>";
+                    ides.value = "<?php echo $ides; ?>";
+                    iprice.value = <?php echo $iprice; ?>;
+                    btn.value = "Update";
+                    btn.classList.remove("btn-primary");
+                    btn.classList.add("btn-danger");
+                </script>
+                <?php
             }
         }
-    ?>
-        <form action="upload.php" method="post" enctype="multipart/form-data">
-        <?php
-            if(isset($_GET["msg"]))
-            {
-                echo "<h3 class='text-center text-danger>".$_GET['msg']."</h3>";
-            }
         ?>
-            <h3 class="text-primary text-center my-3">Insert Item</h3>
-            <div class="row mb-3">
-                <div class="col-md-3 offset-md-2 col-12">
-                    <label for="" class="fw-bold mb-md-0 mb-3">Item Name</label>
-                </div>
-                <div class="col-md-5 col-12">
-                    <input type="text" name="itemname" class="form-control" required autofocus>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-3 offset-md-2 col-12">
-                    <label for="" class="fw-bold mb-md-0 mb-3">Item Description</label>
-                </div>
-                <div class="col-md-5 col-12">
-                    <textarea name="itemdescription" id="" rows="7" class="form-control"></textarea>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-3 offset-md-2 col-12">
-                    <label for="" class="fw-bold mb-md-0 mb-3">Item Price</label>
-                </div>
-                <div class="col-md-5 col-12">
-                <input type="number" name="itemprice" class="form-control" min="100" max="999999" required>
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-md-3 offset-md-2 col-12">
-                    <label for="" class="fw-bold mb-md-0 mb-3">Item Image</label>
-                </div>
-                <div class="col-md-5 col-12">
-                <input type="file" name="itemimage" class="form-control" required>
-                </div>
-            </div>
-
-            <div class="text-center">
-                <input type="submit" value="Insert Item" class = "btn btn-primary" name="btnitem">
-                <input type="reset" value="Clear" class="btn btn-warning">
-            </div>
-        </form>
 
         <h3 class="text-primary mt-5 text-center">List of Items</h3>
         <table class="table table-light table-striped my-3">
@@ -136,7 +177,7 @@
                     echo "<td>".$price."</td>";
                     echo "<td>".$des."</td>";
                     echo "<td>";
-                    echo "<a href='?action=update&iid=$iid'><i class='bi bi-pencil-square text-warning'></i></a>";
+                    echo "<a href='?action=update&iid=$iid&iimg=$image&iname=$name&iprice=$price&ides=$des'><i class='bi bi-pencil-square text-warning'></i></a>";
                     echo "<a href='?action=delete&iid=$iid&iimg=$image&iname=$name'><i class='bi bi-trash3-fill text-danger'></i></a>";
                     echo "</td>";
                     echo "</tr>";
